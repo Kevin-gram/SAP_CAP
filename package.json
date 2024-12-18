@@ -19,9 +19,15 @@
   "cds": {
     "requires": {
       "db": {
-          "kind": "sqlite",
-          "credentials": { "url": "db.sqlite" } 
+        "kind": "sqlite",
+        "credentials": {
+          "url": "db.sqlite"
+        }
       }
     }
-  }
+  },
+  "sapux": [
+    "app/admin-books",
+    "app/browse"
+  ]
 }
