@@ -14,7 +14,7 @@
     "@cap-js/cds-types": "^0.8.0"
   },
   "scripts": {
-    "start": "cds-serve"
+    "start": "cds watch"
   },
   "cds": {
     "requires": {
