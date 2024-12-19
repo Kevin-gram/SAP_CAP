@@ -29,3 +29,16 @@ entity Genres : sap.common.CodeList {
   parent   : Association to Genres;
   children : Composition of many Genres on children.parent = $self;
 }
+
+entity Orders : managed {
+  key ID : Integer;
+  orderDate : Date;
+  items : Composition of many OrderItems on items.order = $self;
+}
+
+entity OrderItems : managed {
+  key ID : Integer;
+  book : Association to Books;
+  quantity : Integer;
+  order : Association to Orders;
+}

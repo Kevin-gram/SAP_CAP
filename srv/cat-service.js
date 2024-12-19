@@ -2,33 +2,47 @@ const cds = require('@sap/cds')
 
 module.exports = class CatalogService extends cds.ApplicationService { init() {
 
-  const { Books } = cds.entities('sap.capire.bookshop')
-  const { ListOfBooks } = this.entities
+  const { Books, Orders, OrderItems } = cds.entities('sap.capire.bookshop')
 
   // Add some discount for overstocked books
-  this.after('each', ListOfBooks, book => {
+  this.after('each', 'Books', book => {
     if (book.stock > 111) book.title += ` -- 11% discount!`
   })
 
-  // Reduce stock of ordered books if available stock suffices
+  // Handle deep insert for orders
   this.on('submitOrder', async req => {
-    let { book:id, quantity } = req.data
-    let book = await SELECT.one.from (Books, id, b => b.stock)
+    const { items } = req.data
 
-    // Validate input data
-    if (!book) return req.error (404, `Book #${id} doesn't exist`)
-    if (quantity < 1) return req.error (400, `quantity has to be 1 or more`)
-    if (!book.stock || quantity > book.stock) return req.error (409, `${quantity} exceeds stock for book #${id}`)
+    // Create a new order
+    const order = await INSERT.into(Orders).entries({ orderDate: new Date() })
 
-    // Reduce stock in database and return updated stock value
-    await UPDATE (Books, id) .with ({ stock: book.stock -= quantity })
-    return book
-  })
+    // Validate and process each item in the order
+    for (const item of items) {
+      let { book:id, quantity } = item
+      let book = await SELECT.one.from (Books, id, b => b.stock)
 
-  // Emit event when an order has been submitted
-  this.after('submitOrder', async (_,req) => {
-    let { book, quantity } = req.data
-    await this.emit('OrderedBook', { book, quantity, buyer: req.user.id })
+      // Validate input data
+      if (!book) return req.error (404, `Book #${id} doesn't exist`)
+      if (quantity < 1) return req.error (400, `quantity has to be 1 or more`)
+      if (!book.stock || quantity > book.stock) return req.error (409, `${quantity} exceeds stock for book #${id}`)
+
+      // Reduce stock in database
+      await UPDATE (Books, id) .with ({ stock: book.stock -= quantity })
+
+      // Create order item
+      await INSERT.into(OrderItems).entries({ book_ID: id, quantity, order_ID: order.ID })
+    }
+
+    // Emit event for each item in the order
+    for (const item of items) {
+      let { book, quantity } = item
+      await this.emit('OrderedBook', { book, quantity, buyer: req.user.id })
+    }
+
+    // Return the updated stock for the first item as an example
+    let firstItem = items[0]
+    let updatedBook = await SELECT.one.from (Books, firstItem.book, b => b.stock)
+    return updatedBook
   })
 
   // Delegate requests to the underlying generic service
