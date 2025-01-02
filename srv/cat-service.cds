@@ -2,7 +2,7 @@ using { sap.capire.bookshop as my } from '../db/schema';
 
 service CatalogService {
   /** For display in details pages */
-  @readonly entity Books as projection on my.Books { *,
+  entity Books as projection on my.Books { *,
     author.name as author
   } excluding { createdBy, modifiedBy };
 
