@@ -20,9 +20,5 @@ service CatalogService {
   ) returns { stock: Integer };
 
   event OrderedBook : { book: Books:ID; quantity: Integer; buyer: String };
-  event NewBookCreated : {
-    ID: Integer;
-    title: String;
-    author: String;
-  };
+
 }
