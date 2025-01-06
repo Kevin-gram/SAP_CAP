@@ -25,4 +25,14 @@ service CatalogService {
     title: String;
     author: String;
   };
+  event BookUpdated :{
+    ID: Integer;
+    title:String;
+    author:String;
+  };
+  event BookDeleted :{
+    ID: Integer;
+    title:String;
+    author:String;
+  }
 }

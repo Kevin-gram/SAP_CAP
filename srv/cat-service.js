@@ -55,7 +55,17 @@ module.exports = class CatalogService extends cds.ApplicationService { init() {
   this.on('NewBookCreated', (msg) => {
     console.log('New Book Created:', msg);
   });
-
+this.after('CREATE','Books' ,async (data,req)=>{
+  const {ID,title,author}=data;
+  await this.emit('BookUpdated', {ID,title,author})
+})
+ this.on('BookUpdated',(msg)=>{
+  console.log("a book with these details was updated :", msg);
+ })
+this.after('CREATE','Books' ,async (data,req)=>{
+  const {ID,title,author}=data;
+  await this.emit('BookDeleted', {ID,title,author})
+})
   // Delegate requests to the underlying generic service
   return super.init();
 }};
