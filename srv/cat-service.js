@@ -44,7 +44,10 @@ module.exports = class CatalogService extends cds.ApplicationService { init() {
     let updatedBook = await SELECT.one.from (Books, firstItem.book, b => b.stock)
     return updatedBook
   })
-
+this.after('CREATE', 'Books', async (data,req)=>{
+  const {ID,title,author}=data
+  await this.emit('NewBookCreated', {ID, title, author})
+})
   // Delegate requests to the underlying generic service
   return super.init()
 }}
