@@ -1,6 +1,7 @@
 using { Currency, managed, sap } from '@sap/cds/common';
 namespace sap.capire.bookshop;
 
+@cds.persistence.extensible
 entity Books : managed {
   key ID : Integer;
   @mandatory title  : localized String(111);
@@ -13,6 +14,7 @@ entity Books : managed {
   image : LargeBinary @Core.MediaType : 'image/png';
 }
 
+@cds.persistence.extensible
 entity Authors : managed {
   key ID : Integer;
   @mandatory name   : String(111);
@@ -24,18 +26,21 @@ entity Authors : managed {
 }
 
 /** Hierarchically organized Code List for Genres */
+@cds.persistence.extensible
 entity Genres : sap.common.CodeList {
   key ID   : Integer;
   parent   : Association to Genres;
   children : Composition of many Genres on children.parent = $self;
 }
 
+@cds.persistence.extensible
 entity Orders : managed {
   key ID : Integer;
   orderDate : Date;
   items : Composition of many OrderItems on items.order = $self;
 }
 
+@cds.persistence.extensible
 entity OrderItems : managed {
   key ID : Integer;
   book : Association to Books;
