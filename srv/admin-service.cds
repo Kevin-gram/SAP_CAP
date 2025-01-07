@@ -5,7 +5,7 @@ service AdminService {
   entity Authors as projection on my.Authors;
   entity Genres as projection on my.Genres;
 
-  action createAuthor(
+ action createAuthor(
     name: String(111),
     dateOfBirth: Date,
     placeOfBirth: String,

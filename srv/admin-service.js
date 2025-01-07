@@ -20,7 +20,7 @@ module.exports = class AdminService extends cds.ApplicationService { init() {
   this.on('createAuthor', async (req) => {
     const { name, dateOfBirth, placeOfBirth, dateOfDeath, placeOfDeath } = req.data;
     const newAuthor = {
-      ID: cds.utils.uuid(), // Ensure ID is a UUID
+      ID: Math.floor(Math.random() * 1000000), // Ensure ID is an integer
       name, // Ensure name is a string
       dateOfBirth,
       placeOfBirth,
