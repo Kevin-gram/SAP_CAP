@@ -2,6 +2,7 @@ using { sap.capire.bookshop as my } from '../db/schema';
 
 extend entity my.Books {
   additionalInfo : String(255);
+  pages: String(30)
 }
 
 extend entity my.Authors {
