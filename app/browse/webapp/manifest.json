@@ -1,7 +1,7 @@
 {
   "_version": "1.49.0",
   "sap.app": {
-    "id": "bookshop.browse",
+    "id": "bookshop.admin",
     "applicationVersion": {
       "version": "1.0.0"
     },
@@ -10,8 +10,8 @@
     "description": "{{appDescription}}",
     "i18n": "i18n/i18n.properties",
     "dataSources": {
-      "CatalogService": {
-        "uri": "odata/v4/catalog/",
+      "AdminService": {
+        "uri": "/odata/v4/admin/",
         "type": "OData",
         "settings": {
           "odataVersion": "4.0"
@@ -22,14 +22,7 @@
       "inbounds": {
         "Books-display": {
           "signature": {
-            "parameters": {
-              "Books.ID": {
-                "renameTo": "ID"
-              },
-              "Authors.books.ID": {
-                "renameTo": "ID"
-              }
-            },
+            "parameters": {},
             "additionalParameters": "allowed"
           },
           "semanticObject": "Books",
@@ -39,8 +32,25 @@
           "subTitle": "{{appSubTitle}}",
           "icon": "sap-icon://course-book",
           "indicatorDataSource": {
-            "dataSource": "CatalogService",
+            "dataSource": "AdminService",
             "path": "Books/$count",
+            "refresh": 1800
+          }
+        },
+        "Authors-display": {
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          },
+          "semanticObject": "Authors",
+          "action": "display",
+          "title": "{{appTitle}}",
+          "info": "{{appInfo}}",
+          "subTitle": "{{appSubTitle}}",
+          "icon": "sap-icon://person-placeholder",
+          "indicatorDataSource": {
+            "dataSource": "AdminService",
+            "path": "Authors/$count",
             "refresh": 1800
           }
         }
@@ -69,7 +79,7 @@
         "uri": "i18n/i18n.properties"
       },
       "": {
-        "dataSource": "CatalogService",
+        "dataSource": "AdminService",
         "settings": {
           "operationMode": "Server",
           "autoExpandSelect": true,
@@ -93,6 +103,11 @@
           "pattern": "Books({key}):?query:",
           "name": "BooksDetails",
           "target": "BooksDetails"
+        },
+        {
+          "pattern": "Authors({key}):?query:",
+          "name": "AuthorsDetails",
+          "target": "AuthorsDetails"
         }
       ],
       "targets": {
@@ -110,17 +125,39 @@
                     "route": "BooksDetails"
                   }
                 }
+              },
+              "actions": {
+                "createBook": {
+                  "id": "createBook",
+                  "text": "Create Book",
+                  "press": "onCreateBook"
+                },
+                "createAuthor": {
+                  "id": "createAuthor",
+                  "text": "Create Author",
+                  "press": "onCreateAuthor"
+                }
               }
             }
           }
         },
         "BooksDetails": {
           "type": "Component",
-          "id": "BooksDetailsList",
+          "id": "BooksDetails",
           "name": "sap.fe.templates.ObjectPage",
           "options": {
             "settings": {
               "entitySet": "Books"
+            }
+          }
+        },
+        "AuthorsDetails": {
+          "type": "Component",
+          "id": "AuthorsDetails",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "entitySet": "Authors"
             }
           }
         }

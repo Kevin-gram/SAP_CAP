@@ -99,6 +99,18 @@
                     "route": "BooksDetails"
                   }
                 }
+              },
+              "actions": {
+                "createBook": {
+                  "id": "createBook",
+                  "text": "Create Book",
+                  "press": "onCreateBook"
+                },
+                "createAuthor": {
+                  "id": "createAuthor",
+                  "text": "Create Author",
+                  "press": "onCreateAuthor"
+                }
               }
             }
           }

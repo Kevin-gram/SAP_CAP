@@ -6,7 +6,11 @@ service AdminService {
   entity Genres as projection on my.Genres;
 
   action createAuthor(
-    name: String(111)
+    name: String(111),
+    dateOfBirth: Date,
+    placeOfBirth: String,
+    dateOfDeath: Date,
+    placeOfDeath: String
   ) returns Authors;
 }
 

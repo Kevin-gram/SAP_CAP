@@ -18,10 +18,14 @@ module.exports = class AdminService extends cds.ApplicationService { init() {
 
   // Implement the createAuthor action
   this.on('createAuthor', async (req) => {
-    const { name } = req.data;
+    const { name, dateOfBirth, placeOfBirth, dateOfDeath, placeOfDeath } = req.data;
     const newAuthor = {
-      ID: cds.utils.uuid(),
-      name
+      ID: cds.utils.uuid(), // Ensure ID is a UUID
+      name, // Ensure name is a string
+      dateOfBirth,
+      placeOfBirth,
+      dateOfDeath,
+      placeOfDeath
     };
     const result = await INSERT.into(Authors).entries(newAuthor);
     return result;
