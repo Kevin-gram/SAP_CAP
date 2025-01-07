@@ -4,5 +4,10 @@ service AdminService {
   entity Books as projection on my.Books;
   entity Authors as projection on my.Authors;
   entity Genres as projection on my.Genres;
-} 
+
+  action createAuthor(
+    name: String(111)
+  ) returns Authors;
+}
+
 annotate AdminService.Books with @odata.draft.enabled;
