@@ -55,20 +55,36 @@ module.exports = class CatalogService extends cds.ApplicationService { init() {
   this.on('NewBookCreated', (msg) => {
     console.log('New Book Created:', msg);
   });
-this.after('UPDATE','Books' ,async (data,req)=>{
-  const {ID,title,author}=data;
-  await this.emit('BookUpdated', {ID,title,author})
-})
- this.on('BookUpdated',(msg)=>{
-  console.log("a book with these details was updated :", msg);
- })
-this.after('DELETE','Books' ,async (data,req)=>{
-  const {ID,title,author}=data;
-  await this.emit('BookDeleted', {ID,title,author})
-})
-this.on('BookDeleted',(msg)=>{
-  console.log("a book with these details was deleted :", msg);
- })
+
+  // Emit BookUpdated event when a book is updated
+  this.after('UPDATE', 'Books', async (data, req) => {
+    const { ID, title, author } = data;
+    await this.emit('BookUpdated', { ID, title, author });
+  });
+
+  this.on('BookUpdated', (msg) => {
+    console.log("A book with these details was updated:", msg);
+  });
+
+  // Emit BookDeleted event when a book is deleted
+  this.after('DELETE', 'Books', async (data, req) => {
+    const { ID, title, author } = data;
+    await this.emit('BookDeleted', { ID, title, author });
+  });
+
+  this.on('BookDeleted', (msg) => {
+    console.log("A book with these details was deleted:", msg);
+  });
+
+  // Handle READ requests for Books with specific fields
+  this.on('READ', 'Books', async (req) => {
+    const { ID, title, author_ID } = req.query.SELECT.columns;
+    if (ID && title && author_ID) {
+      return SELECT.from(Books).columns('ID', 'title', 'author.name as author');
+    }
+    return SELECT.from(Books);
+  });
+
   // Delegate requests to the underlying generic service
   return super.init();
 }};
