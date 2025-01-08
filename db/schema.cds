@@ -4,7 +4,7 @@ namespace sap.capire.bookshop;
 @cds.persistence.extensible
 entity Books : managed {
   key ID : Integer;
-  @assert.unique title  : localized String(111);
+  @mandatory title  : localized String(111);
   descr  : localized String(1111);
   @mandatory author : Association to Authors;
   genre  : Association to Genres;
