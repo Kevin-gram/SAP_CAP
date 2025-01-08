@@ -16,9 +16,21 @@ module.exports = class AdminService extends cds.ApplicationService { init() {
 
   const { Authors } = cds.entities('sap.capire.bookshop');
 
-  // Implement the createAuthor action
+  // Implement the createAuthor action with validation
   this.on('createAuthor', async (req) => {
     const { name, dateOfBirth, placeOfBirth, dateOfDeath, placeOfDeath } = req.data;
+
+    // Validate input data
+    if (!name || typeof name !== 'string') {
+      return req.error(400, 'Invalid or missing "name"');
+    }
+    if (dateOfBirth && isNaN(Date.parse(dateOfBirth))) {
+      return req.error(400, 'Invalid "dateOfBirth"');
+    }
+    if (dateOfDeath && isNaN(Date.parse(dateOfDeath))) {
+      return req.error(400, 'Invalid "dateOfDeath"');
+    }
+
     const newAuthor = {
       ID: Math.floor(Math.random() * 1000000), // Ensure ID is an integer
       name, // Ensure name is a string
