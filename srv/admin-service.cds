@@ -19,8 +19,7 @@ service AdminService {
     author_ID: Integer,
     genre_ID: Integer,
     price: Decimal(10,2),
-    currency_code: String(3)
+    currency_code: String(3),
+    additionalInfo: String(255) 
   ) returns Books;
 }
-
-annotate AdminService.Books with @odata.draft.enabled;

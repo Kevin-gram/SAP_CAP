@@ -1,78 +1,73 @@
-const { expect } = require('chai');
-const sinon = require('sinon');
 const cds = require('@sap/cds');
-const AdminService = require('../path_to_your_AdminService'); // Replace with the correct path to your AdminService
 
-describe('AdminService - createAuthor', function() {
-  let adminService;
-  let insertSpy;
+module.exports = class AdminService extends cds.ApplicationService { init() {
 
-  beforeEach(() => {
-    // Create a spy for the INSERT method to mock the database insert
-    insertSpy = sinon.spy();
+  const { Books, Authors } = this.entities;
 
-    // Mocking the cds entities
-    cds.entities = {
-      Authors: {
-        // Mock the insert method
-        insert: insertSpy,
-      },
+  // Implement the createAuthor action with validation
+  this.on('createAuthor', async (req) => {
+    const { name, dateOfBirth, placeOfBirth, dateOfDeath, placeOfDeath } = req.data;
+
+    // Validate input data
+    if (!name || typeof name !== 'string') {
+      return req.error(400, 'Invalid or missing "name"');
+    }
+    if (dateOfBirth && isNaN(Date.parse(dateOfBirth))) {
+      return req.error(400, 'Invalid "dateOfBirth"');
+    }
+    if (dateOfDeath && isNaN(Date.parse(dateOfDeath))) {
+      return req.error(400, 'Invalid "dateOfDeath"');
+    }
+
+    const newAuthor = {
+      ID: Math.floor(Math.random() * 1000000), // Ensure ID is an integer
+      name, // Ensure name is a string
+      dateOfBirth,
+      placeOfBirth,
+      dateOfDeath,
+      placeOfDeath
     };
-
-    // Initialize the AdminService class
-    adminService = new AdminService();
-    adminService.init();
+    const result = await INSERT.into(Authors).entries(newAuthor);
+    return result;
   });
 
-  it('should successfully create an author when valid data is provided', async function() {
-    // Prepare mock request data for createAuthor action
-    const req = {
-      data: {
-        name: 'John Doe',
-        dateOfBirth: '1980-01-01',
-        placeOfBirth: 'New York',
-        dateOfDeath: null,
-        placeOfDeath: null,
-      },
-      error: sinon.stub(),
+  // Implement the createBook action with validation
+  this.on('createBook', async (req) => {
+    const { title, stock, author_ID, genre_ID, price, currency_code, additionalInfo } = req.data;
+
+    // Validate input data
+    if (!title || typeof title !== 'string') {
+      return req.error(400, 'Invalid or missing "title"');
+    }
+    if (stock == null || typeof stock !== 'number' || stock < 0) {
+      return req.error(400, 'Invalid or missing "stock"');
+    }
+    if (!author_ID) {
+      return req.error(400, 'Invalid or missing "author_ID"');
+    }
+    if (!genre_ID) {
+      return req.error(400, 'Invalid or missing "genre_ID"');
+    }
+    if (price == null || typeof price !== 'number' || price < 0) {
+      return req.error(400, 'Invalid or missing "price"');
+    }
+    if (!currency_code) {
+      return req.error(400, 'Invalid or missing "currency_code"');
+    }
+
+    const newBook = {
+      ID: Math.floor(Math.random() * 1000000), // Ensure ID is an integer
+      title,
+      stock,
+      author_ID,
+      genre_ID,
+      price,
+      currency_code,
+      additionalInfo // Include the additionalInfo property
     };
-
-    // Simulate the createAuthor action
-    await adminService['createAuthor'](req);
-
-    // Assert that the INSERT method was called
-    expect(insertSpy.calledOnce).to.be.true;
-
-    // Assert that the correct parameters were passed to the INSERT method
-    const newAuthor = insertSpy.getCall(0).args[0];
-    expect(newAuthor).to.have.property('name', 'John Doe');
-    expect(newAuthor).to.have.property('dateOfBirth', '1980-01-01');
-    expect(newAuthor).to.have.property('placeOfBirth', 'New York');
-    expect(newAuthor).to.have.property('dateOfDeath', null);
-    expect(newAuthor).to.have.property('placeOfDeath', null);
+    const result = await INSERT.into(Books).entries(newBook);
+    return result;
   });
 
-  it('should return an error if the name is missing or invalid', async function() {
-    // Prepare an invalid request with missing name
-    const req = {
-      data: {
-        name: '',
-        dateOfBirth: '1980-01-01',
-        placeOfBirth: 'New York',
-      },
-      error: sinon.stub(),
-    };
-
-    // Simulate the createAuthor action
-    await adminService['createAuthor'](req);
-
-    // Assert that an error was returned
-    expect(req.error.calledOnce).to.be.true;
-    expect(req.error.args[0][0]).to.equal(400);
-    expect(req.error.args[0][1]).to.equal('Invalid or missing "name"');
-  });
-
-  afterEach(() => {
-    sinon.restore(); // Restore the original state of the sinon spies
-  });
-});
+  return super.init();
+}};
