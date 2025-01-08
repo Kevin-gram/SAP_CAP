@@ -12,6 +12,14 @@ service AdminService {
     dateOfDeath: Date,
     placeOfDeath: String
   ) returns Authors;
+  action createBook(
+    title: String(111),
+    stock: Integer,
+    author_ID: Integer,
+    genre_ID: Integer,
+    price: Decimal(10,2),
+    currency_code: String(3)
+  ) returns Books;
 }
 
 annotate AdminService.Books with @odata.draft.enabled;

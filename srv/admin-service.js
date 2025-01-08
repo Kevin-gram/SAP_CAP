@@ -2,19 +2,7 @@ const cds = require('@sap/cds');
 
 module.exports = class AdminService extends cds.ApplicationService { init() {
 
-  const { Books } = this.entities;
-
-  /**
-   * Generate IDs for new Books drafts
-   */
-  this.before('NEW', Books.drafts, async (req) => {
-    if (req.data.ID) return;
-    const { ID: id1 } = await SELECT.one.from(Books).columns('max(ID) as ID');
-    const { ID: id2 } = await SELECT.one.from(Books.drafts).columns('max(ID) as ID');
-    req.data.ID = Math.max(id1 || 0, id2 || 0) + 1;
-  });
-
-  const { Authors } = cds.entities('sap.capire.bookshop');
+  const { Books, Authors } = this.entities;
 
   // Implement the createAuthor action with validation
   this.on('createAuthor', async (req) => {
@@ -40,6 +28,43 @@ module.exports = class AdminService extends cds.ApplicationService { init() {
       placeOfDeath
     };
     const result = await INSERT.into(Authors).entries(newAuthor);
+    return result;
+  });
+
+  // Implement the createBook action with validation
+  this.on('createBook', async (req) => {
+    const { title, stock, author_ID, genre_ID, price, currency_code } = req.data;
+
+    // Validate input data
+    if (!title || typeof title !== 'string') {
+      return req.error(400, 'Invalid or missing "title"');
+    }
+    if (stock == null || typeof stock !== 'number' || stock < 0) {
+      return req.error(400, 'Invalid or missing "stock"');
+    }
+    if (!author_ID) {
+      return req.error(400, 'Invalid or missing "author_ID"');
+    }
+    if (!genre_ID) {
+      return req.error(400, 'Invalid or missing "genre_ID"');
+    }
+    if (price == null || typeof price !== 'number' || price < 0) {
+      return req.error(400, 'Invalid or missing "price"');
+    }
+    if (!currency_code) {
+      return req.error(400, 'Invalid or missing "currency_code"');
+    }
+
+    const newBook = {
+      ID: Math.floor(Math.random() * 1000000), // Ensure ID is an integer
+      title,
+      stock,
+      author_ID,
+      genre_ID,
+      price,
+      currency_code
+    };
+    const result = await INSERT.into(Books).entries(newBook);
     return result;
   });
 
