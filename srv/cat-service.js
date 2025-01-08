@@ -19,15 +19,15 @@ module.exports = class CatalogService extends cds.ApplicationService { init() {
     // Validate and process each item in the order
     for (const item of items) {
       let { book:id, quantity } = item;
-      let book = await SELECT.one.from(Books, id, b => b.stock);
+      let book = await SELECT.one.from (Books, id, b => b.stock);
 
       // Validate input data
-      if (!book) return req.error(404, `Book #${id} doesn't exist`);
-      if (quantity < 1) return req.error(400, `Quantity has to be 1 or more`);
-      if (!book.stock || quantity > book.stock) return req.error(409, `${quantity} exceeds stock for book #${id}`);
+      if (!book) return req.error (404, `Book #${id} doesn't exist`);
+      if (quantity < 1) return req.error (400, `quantity has to be 1 or more`);
+      if (!book.stock || quantity > book.stock) return req.error (409, `${quantity} exceeds stock for book #${id}`);
 
       // Reduce stock in database
-      await UPDATE(Books, id).with({ stock: book.stock -= quantity });
+      await UPDATE (Books, id) .with ({ stock: book.stock -= quantity });
 
       // Create order item
       await INSERT.into(OrderItems).entries({ book_ID: id, quantity, order_ID: order.ID });
@@ -41,18 +41,14 @@ module.exports = class CatalogService extends cds.ApplicationService { init() {
 
     // Return the updated stock for the first item as an example
     let firstItem = items[0];
-    let updatedBook = await SELECT.one.from(Books, firstItem.book, b => b.stock);
+    let updatedBook = await SELECT.one.from (Books, firstItem.book, b => b.stock);
     return updatedBook;
   });
 
   // Emit NewBookCreated event when a new book is created
   this.after('CREATE', 'Books', async (data, req) => {
     const { ID, title, author } = data;
-    try {
-      await this.emit('NewBookCreated', { ID, title, author });
-    } catch (error) {
-      console.error('Error emitting NewBookCreated event:', error);
-    }
+    await this.emit('NewBookCreated', { ID, title, author });
   });
 
   // Handle the NewBookCreated event
@@ -63,11 +59,7 @@ module.exports = class CatalogService extends cds.ApplicationService { init() {
   // Emit BookUpdated event when a book is updated
   this.after('UPDATE', 'Books', async (data, req) => {
     const { ID, title, author } = data;
-    try {
-      await this.emit('BookUpdated', { ID, title, author });
-    } catch (error) {
-      console.error('Error emitting BookUpdated event:', error);
-    }
+    await this.emit('BookUpdated', { ID, title, author });
   });
 
   this.on('BookUpdated', (msg) => {
@@ -77,11 +69,7 @@ module.exports = class CatalogService extends cds.ApplicationService { init() {
   // Emit BookDeleted event when a book is deleted
   this.after('DELETE', 'Books', async (data, req) => {
     const { ID, title, author } = data;
-    try {
-      await this.emit('BookDeleted', { ID, title, author });
-    } catch (error) {
-      console.error('Error emitting BookDeleted event:', error);
-    }
+    await this.emit('BookDeleted', { ID, title, author });
   });
 
   this.on('BookDeleted', (msg) => {
