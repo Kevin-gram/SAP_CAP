@@ -66,7 +66,38 @@ module.exports = class AdminService extends cds.ApplicationService { init() {
       additionalInfo // Include the additionalInfo property
     };
     const result = await INSERT.into(Books).entries(newBook);
+
+    // Emit NewBookCreated event
+    await this.emit('NewBookCreated', { ID: newBook.ID, title: newBook.title, author: newBook.author_ID });
+
     return result;
+  });
+
+  // Emit BookUpdated event when a book is updated
+  this.after('UPDATE', 'Books', async (data, req) => {
+    const { ID, title, author_ID } = data;
+    await this.emit('BookUpdated', { ID, title, author: author_ID });
+  });
+
+  // Emit BookDeleted event when a book is deleted
+  this.after('DELETE', 'Books', async (data, req) => {
+    const { ID, title, author_ID } = data;
+    await this.emit('BookDeleted', { ID, title, author: author_ID });
+  });
+
+  // Handle the NewBookCreated event
+  this.on('NewBookCreated', (msg) => {
+    console.log('New Book Created:', msg);
+  });
+
+  // Handle the BookUpdated event
+  this.on('BookUpdated', (msg) => {
+    console.log('Book Updated:', msg);
+  });
+
+  // Handle the BookDeleted event
+  this.on('BookDeleted', (msg) => {
+    console.log('Book Deleted:', msg);
   });
 
   return super.init();
