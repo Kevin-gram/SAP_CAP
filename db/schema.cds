@@ -11,7 +11,6 @@ entity Books : managed {
   stock  : Integer;
   price  : Decimal;
   currency : Currency;
-  ratings : Integer;
   image : LargeBinary @Core.MediaType : 'image/png';
 }
 

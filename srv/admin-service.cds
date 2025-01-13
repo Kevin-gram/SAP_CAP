@@ -15,11 +15,33 @@ service AdminService {
 
   action createBook(
     title: String(111),
+    descr: String(1111),
     stock: Integer,
     author_ID: Integer,
     genre_ID: Integer,
     price: Decimal(10,2),
     currency_code: String(3),
-    additionalInfo: String(255) 
+    additionalInfo: String(255)
   ) returns Books;
+
+  event NewBookCreated : {
+    ID: Integer;
+    title: String;
+    descr: String;
+    author: String;
+  };
+
+  event BookUpdated : {
+    ID: Integer;
+    title: String;
+    descr: String;
+    author: String;
+  };
+
+  event BookDeleted : {
+    ID: Integer;
+    title: String;
+    descr: String;
+    author: String;
+  };
 }

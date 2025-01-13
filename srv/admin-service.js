@@ -33,11 +33,14 @@ module.exports = class AdminService extends cds.ApplicationService { init() {
 
   // Implement the createBook action with validation
   this.on('createBook', async (req) => {
-    const { title, stock, author_ID, genre_ID, price, currency_code, additionalInfo } = req.data;
+    const { title, descr, stock, author_ID, genre_ID, price, currency_code, additionalInfo } = req.data;
 
     // Validate input data
     if (!title || typeof title !== 'string') {
       return req.error(400, 'Invalid or missing "title"');
+    }
+    if (!descr || typeof descr !== 'string') {
+      return req.error(400, 'Invalid or missing "descr"');
     }
     if (stock == null || typeof stock !== 'number' || stock < 0) {
       return req.error(400, 'Invalid or missing "stock"');
@@ -58,6 +61,7 @@ module.exports = class AdminService extends cds.ApplicationService { init() {
     const newBook = {
       ID: Math.floor(Math.random() * 1000000), // Ensure ID is an integer
       title,
+      descr, // Include the descr field
       stock,
       author_ID,
       genre_ID,
@@ -68,21 +72,21 @@ module.exports = class AdminService extends cds.ApplicationService { init() {
     const result = await INSERT.into(Books).entries(newBook);
 
     // Emit NewBookCreated event
-    await this.emit('NewBookCreated', { ID: newBook.ID, title: newBook.title, author: newBook.author_ID });
+    await this.emit('NewBookCreated', { ID: newBook.ID, title: newBook.title, descr: newBook.descr, author: newBook.author_ID });
 
     return result;
   });
 
-  // E mit BookUpdated event when a book is updated
+  // Emit BookUpdated event when a book is updated
   this.after('UPDATE', 'Books', async (data, req) => {
-    const { ID, title, author_ID } = data;
-    await this.emit('BookUpdated', { ID, title, author: author_ID });
+    const { ID, title, descr, author_ID } = data;
+    await this.emit('BookUpdated', { ID, title, descr, author: author_ID });
   });
 
   // Emit BookDeleted event when a book is deleted
   this.after('DELETE', 'Books', async (data, req) => {
-    const { ID, title, author_ID } = data;
-    await this.emit('BookDeleted', { ID, title, author: author_ID });
+    const { ID, title, descr, author_ID } = data;
+    await this.emit('BookDeleted', { ID, title, descr, author: author_ID });
   });
 
   // Handle the NewBookCreated event
