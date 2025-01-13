@@ -73,7 +73,7 @@ module.exports = class AdminService extends cds.ApplicationService { init() {
     return result;
   });
 
-  // Emit BookUpdated event when a book is updated
+  // E mit BookUpdated event when a book is updated
   this.after('UPDATE', 'Books', async (data, req) => {
     const { ID, title, author_ID } = data;
     await this.emit('BookUpdated', { ID, title, author: author_ID });
