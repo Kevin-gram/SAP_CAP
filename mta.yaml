@@ -1,0 +1,45 @@
+_schema-version: '3.1'
+ID: bookshop
+version: 1.0.0
+description: "Bookshop CAP application"
+
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npm ci
+        - cds build
+
+modules:
+  - name: bookshop-srv
+    type: nodejs
+    path: gen/srv
+    parameters:
+      buildpack: nodejs_buildpack
+    provides:
+      - name: srv-api
+        properties:
+          srv-url: ${default-url}
+    requires:
+      - name: bookshop-db
+      - name: bookshop-auth
+
+  - name: bookshop-db-deployer
+    type: hdb
+    path: gen/db
+    requires:
+      - name: bookshop-db
+
+resources:
+  - name: bookshop-db
+    type: com.sap.xs.hdi-container
+    parameters:
+      service: hana
+      service-plan: hdi-shared
+
+  - name: bookshop-auth
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
+      path: ./xs-security.json
