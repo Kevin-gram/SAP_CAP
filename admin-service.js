@@ -1,3 +1,5 @@
+// FILE: admin-service.js
+// filepath: /c:/Users/KevinNyiringango/SAP_CAP/srv/admin-service.js
 const cds = require('@sap/cds');
 
 module.exports = class AdminService extends cds.ApplicationService { init() {
