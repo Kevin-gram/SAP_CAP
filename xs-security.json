@@ -4,26 +4,46 @@
   "scopes": [
     {
       "name": "$XSAPPNAME.Admin",
-      "description": "Admin access"
+      "description": "Admin Role"
     },
     {
       "name": "$XSAPPNAME.User",
-      "description": "User access"
+      "description": "User Role"
+    },
+    {
+      "name": "$XSAPPNAME.Read",
+      "description": "Read books"
+    },
+    {
+      "name": "$XSAPPNAME.Create",
+      "description": "Create books"
+    },
+    {
+      "name": "$XSAPPNAME.Update",
+      "description": "Update books"
+    },
+    {
+      "name": "$XSAPPNAME.Delete",
+      "description": "Delete books"
     }
   ],
   "role-templates": [
     {
-      "name": "Admin",
-      "description": "Admin access",
+      "name": "BookshopAdmin",
+      "description": "Book Shop Administrator",
       "scope-references": [
-        "$XSAPPNAME.Admin"
+        "$XSAPPNAME.Admin",
+        "$XSAPPNAME.Create",
+        "$XSAPPNAME.Update",
+        "$XSAPPNAME.Delete"
       ]
     },
     {
-      "name": "User",
-      "description": "User access",
+      "name": "BookshopUser",
+      "description": "Book Shop User",
       "scope-references": [
-        "$XSAPPNAME.User"
+        "$XSAPPNAME.User",
+        "$XSAPPNAME.Read"
       ]
     }
   ]
