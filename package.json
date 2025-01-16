@@ -46,6 +46,14 @@
             "url": "db.sqlite"
           }
         }
+      },
+      "auth": {
+        "[production]": {
+          "kind": "xsuaa"
+        },
+        "[development]": {
+          "kind": "mock"
+        }
       }
     },
     "hana": {
