@@ -1,0 +1,9 @@
+# FILE: manifest.yaml
+# filepath: /c:/Users/KevinNyiringango/SAP_CAP/manifest.yaml
+applications:
+- name: bookshop
+  memory: 256M
+  buildpack: nodejs_buildpack
+  services:
+    - bookshop-db
+    - bookshop-auth
