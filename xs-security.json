@@ -1,0 +1,30 @@
+{
+  "xsappname": "bookshop",
+  "tenant-mode": "dedicated",
+  "scopes": [
+    {
+      "name": "$XSAPPNAME.Admin",
+      "description": "Admin access"
+    },
+    {
+      "name": "$XSAPPNAME.User",
+      "description": "User access"
+    }
+  ],
+  "roles": [
+    {
+      "name": "Admin",
+      "description": "Admin role",
+      "scope-references": [
+        "$XSAPPNAME.Admin"
+      ]
+    },
+    {
+      "name": "User",
+      "description": "User role",
+      "scope-references": [
+        "$XSAPPNAME.User"
+      ]
+    }
+  ]
+}

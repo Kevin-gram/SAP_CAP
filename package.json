@@ -6,7 +6,11 @@
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
-    "express": "^4"
+    "express": "^4",
+    "@sap/xssec": "^3",
+    "@sap/xsenv": "^3.4.0",
+    "passport": "^0.6.0",
+    "passport-jwt": "^4.0.0"
   },
   "devDependencies": {
     "@cap-js/cds-types": "^0.8.0",
@@ -28,6 +32,9 @@
         "credentials": {
           "url": "db.sqlite"
         }
+      },
+      "auth": {
+        "kind": "xsuaa"
       }
     }
   },
