@@ -1,0 +1,9 @@
+applications:
+  - name: bookshop
+    memory: 512M
+    disk_quota: 1G
+    buildpacks:
+      - nodejs_buildpack
+    path: .
+    env:
+      NODE_ENV: production
