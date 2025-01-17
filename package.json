@@ -1,3 +1,4 @@
+
 {
   "name": "bookshop",
   "version": "1.0.0",
@@ -15,15 +16,22 @@
   "devDependencies": {
     "@cap-js/cds-types": "^0.8.0",
     "@cap-js/sqlite": "^1",
-    "@sap/cds": "^8.6.0",
     "@sap/cds-dk": "^8.6.1",
+    "@sap/hdi-deploy": "^4.6.0",
     "chai": "^5.1.2",
     "mocha": "^11.0.1",
     "sinon": "^19.0.2",
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^5.1.7",
+    "mbt": "^1.2.18"
   },
   "scripts": {
-    "start": "cds watch"
+    "start": "cds run",
+    "build": "cds build/all",
+    "deploy": "cf deploy mta_archives/bookshop_1.0.0.mtar",
+    "build:mta": "mbt build",
+    "watch": "cds watch",
+    "deploy:local": "cds deploy --to sqlite",
+    "deploy:hana": "cds deploy --to hana"
   },
   "cds": {
     "requires": {
@@ -32,9 +40,6 @@
         "credentials": {
           "url": "db.sqlite"
         }
-      },
-      "auth": {
-        "kind": "xsuaa"
       }
     }
   },
