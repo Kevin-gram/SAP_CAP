@@ -6,10 +6,6 @@ module.exports = class AdminService extends cds.ApplicationService {
 
     // Implement the createAuthor action with validation
     this.on('createAuthor', async (req) => {
-      if (!req.user.is('Admin')) {
-        return req.error(403, 'You are not authorized to create authors');
-      }
-
       const { name, dateOfBirth, placeOfBirth, dateOfDeath, placeOfDeath } = req.data;
 
       // Validate input data
@@ -37,10 +33,6 @@ module.exports = class AdminService extends cds.ApplicationService {
 
     // Implement the createBook action with validation
     this.on('createBook', async (req) => {
-      if (!req.user.is('Admin')) {
-        return req.error(403, 'You are not authorized to create books');
-      }
-
       const { title, descr, stock, author_ID, genre_ID, price, currency_code, additionalInfo } = req.data;
 
       // Validate input data
@@ -87,10 +79,6 @@ module.exports = class AdminService extends cds.ApplicationService {
 
     // Implement the submitOrder action
     this.on('submitOrder', async (req) => {
-      if (!req.user.is('Client')) {
-        return req.error(403, 'You are not authorized to submit orders');
-      }
-
       const { items } = req.data;
 
       // Create a new order
