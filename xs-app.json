@@ -1,0 +1,24 @@
+{
+    "welcomeFile": "/index.html",
+    "authenticationMethod": "none",
+    "routes": [
+      {
+        "source": "^/admin-books/(.*)$",
+        "target": "$1",
+        "localDir": "app/admin-books",
+        "authenticationType": "none"
+      },
+      {
+        "source": "^/browse/(.*)$",
+        "target": "$1",
+        "localDir": "app/browse",
+        "authenticationType": "none"
+      },
+      {
+        "source": "^/odata/(.*)$",
+        "target": "/odata/$1",
+        "destination": "backend"
+      }
+    ]
+  }
+  
