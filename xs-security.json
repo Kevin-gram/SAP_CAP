@@ -4,26 +4,26 @@
   "scopes": [
     {
       "name": "$XSAPPNAME.Admin",
-      "description": "Admin access"
+      "description": "Admin role"
     },
     {
-      "name": "$XSAPPNAME.User",
-      "description": "User access"
+      "name": "$XSAPPNAME.Client",
+      "description": "Client role"
     }
   ],
-  "roles": [
+  "role-templates": [
     {
       "name": "Admin",
-      "description": "Admin role",
+      "description": "Admin role template",
       "scope-references": [
         "$XSAPPNAME.Admin"
       ]
     },
     {
-      "name": "User",
-      "description": "User role",
+      "name": "Client",
+      "description": "Client role template",
       "scope-references": [
-        "$XSAPPNAME.User"
+        "$XSAPPNAME.Client"
       ]
     }
   ]
