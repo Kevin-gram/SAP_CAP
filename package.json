@@ -33,19 +33,19 @@
     "deploy:local": "cds deploy --to sqlite",
     "deploy:hana": "cds deploy --to hana"
   },
-  "cds": {
-    "requires": {
-      "db": {
-        "kind": "sqlite",
-        "credentials": {
-          "url": "db.sqlite"
-        }
-      },
-      "auth": {
-        "kind": "mocked"
+"cds": {
+  "requires": {
+    "db": {
+      "kind": "sqlite",
+      "credentials": {
+        "url": "db.sqlite"
       }
+    },
+    "auth": {
+      "kind": "mocked"
     }
-  },
+  }
+},
   "sapux": [
     "app/admin-books",
     "app/browse"
