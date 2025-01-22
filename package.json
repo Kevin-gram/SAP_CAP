@@ -24,29 +24,41 @@
     "mbt": "^1.2.18"
   },
   "scripts": {
-    "start": "cds run",       
-    "build": "cds build/all",                 
-    "deploy": "cf push",                       
-    "build:mta": "mbt build",                 
-    "watch": "cds watch",                      
-    "deploy:local": "cds deploy --to sqlite",  
+    "start": "cds run",
+    "build": "cds build/all",
+    "deploy": "cf push",
+    "build:mta": "mbt build",
+    "watch": "cds watch",
+    "deploy:local": "cds deploy --to sqlite",
     "deploy:hana": "cds deploy --to hana"
   },
   "cds": {
     "requires": {
       "db": {
-        "kind": "sqlite",                    
+        "kind": "sqlite",
         "credentials": {
-          "url": "db.sqlite"                 
+          "url": "db.sqlite"
         }
       },
       "auth": {
-        "kind": "mocked"                       
+        "kind": "mocked"
+      }
+    },
+    "env": {
+      "production": {
+        "requires": {
+          "db": {
+            "kind": "sqlite",
+            "credentials": {
+              "url": ":memory:"
+            }
+          }
+        }
       }
     }
   },
   "sapux": [
-    "app/admin-books",                        
+    "app/admin-books",
     "app/browse"
   ]
 }
