@@ -6,10 +6,3 @@ applications:
       - nodejs_buildpack
     env:
       NODE_ENV: production
-  - name: bookshop-ui
-    memory: 256M
-    instances: 1
-    buildpacks:
-      - nodejs_buildpack
-    env:
-      NODE_ENV: production
